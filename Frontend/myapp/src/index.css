@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Default Light Mode Styles */
+body {
+    @apply bg-white text-black; /* Light mode default styles */
+}
+
+body.dark {
+    @apply bg-gray-900 text-white; /* Dark mode styles */
+}
+
+/* Heading Styles */
+h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-900; /* Light mode heading colors */
+}
+
+body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 {
+    @apply text-white; /* Dark mode heading colors */
+}
+
+/* Card Styles */
+.card {
+    @apply bg-white text-black border border-gray-300; /* Light mode card styles */
+}
+
+body.dark .card {
+    @apply bg-black text-white border border-gray-700; /* Dark mode card styles */
+}
+
+/* Add additional styles for other components as needed */
+    
