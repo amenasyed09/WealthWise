@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const validator = require('validator'); // To validate email
-const bcrypt = require('bcrypt'); // For password hashing
+const bcrypt = require('bcryptjs'); // For password hashing
 
 const userSchema = new mongoose.Schema({
   username: {
