@@ -39,11 +39,11 @@ const GOOGLE_CLIENT_ID=process.env.GOOGLE_CLIENT_ID;
 const PORT = process.env.PORT || 5000;
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true
 })
   .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.log(err));
+  .catch((err) =>  console.error("Error connecting to MongoDB:", error.message));
 
   
 
