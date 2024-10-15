@@ -2,9 +2,22 @@
 
 **WealthWise** is a personal finance management app built using the MERN stack (MongoDB, Express, React, and Node.js). It allows users to track their income and expenses, view monthly summaries, and analyze yearly savings, providing clear visual insights through interactive charts.
 
+## Tech Stack
+- **Authentication**:
+     - Google OAuth
+     - JWT tokens  
+- **Frontend**:
+     - React.js
+     - Tailwind CSS 
+- **Backend**:
+     - Node.js
+     - Express.js
+- **Database**: MongoDB
+- **Charts**: Chart.js
+  
 ## Features
 
-- **Google Sign In/Sign Up using**: Users can securely sign in or sign up using **Google OAuth**, with **JWT tokens** for authentication and session management.
+- **Google Sign In/Sign Up**: Users can securely sign in or sign up using **Google OAuth**, with **JWT tokens** for authentication and session management.
 - **Profile Setup**: After signing in, users can set up their profile, including uploading a profile picture.
 - **Interactive Dashboard**: The dashboard provides an easy-to-use interface for managing finances:
   - Add and categorize expenses and income.
@@ -13,13 +26,6 @@
   - **Income vs Expense**: Users can view their monthly income vs expense ratio using a **bar chart**.
 - **Dark and Light Mode**: Users can switch between dark and light themes for a personalized experience.
 
-## Tech Stack
-
-- **Frontend**: React.js
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB
-- **Authentication**: Google OAuth & JWT tokens
-- **Charts**: Chart.js
 
 ## Usage
 - **Sign in** using either Google OAuth or the standard email/password method to get started.
@@ -30,4 +36,4 @@
 - View detailed summaries of your monthly and yearly finances with interactive charts:
   - Summaries can be quickly filtered by **month** and **year** to get a customized view of your financial data.
 
-- Toggle Dark/Light mode. 
+- Toggle between Dark/Light mode for a personalized experience.
