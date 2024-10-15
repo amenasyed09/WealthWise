@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const UserModel = require('./Models/User');
 const incomeModel=require('./Models/Income');
 const Expense = require('./Models/Expense'); 
