@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import SignupForm from './SignupForm';
-import LoginForm from './LoginForm';
+
 import ProfilePage from './ProfilePage';
 import Navbar from './Navbar';
 import IncomeTracker from './IncomeTracker';
@@ -16,7 +15,7 @@ import Auth from './Auth';
 function AppLayout({ children }) {
   const location = useLocation();
  
-  const hideNavbarLayout = location.pathname === '/signup' || location.pathname === '/login' || location.pathname==='/';
+  const hideNavbarLayout =  location.pathname==='/';
   
   return (
     <>
@@ -35,8 +34,7 @@ function NavbarRouting() {
         <AppLayout>
           <Routes>
           <Route path='/home' element={<HomePage/>}></Route>
-            <Route path="/signup" element={<SignupForm />} />
-            <Route path="/login" element={<LoginForm />} />
+ 
             <Route path="/about" element={<AboutPage />} />
             <Route path="/" element={<Auth />} />
           

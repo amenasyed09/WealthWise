@@ -55,6 +55,11 @@ const generateTokenAndSetCookie = (user, res) => {
     return token;
   };
   
+app.get('/',(req,res)=>
+{
+  res.setHeader("Access-Control-Allow-Credentials","true");
+  res.send('Api is running');
+})
   app.post('/api/signup', async (req, res) => {
     try {
         const { username, email, password, confirmPassword } = req.body;
