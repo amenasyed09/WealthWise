@@ -7,6 +7,12 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const SummaryPage = () => {
+    const currentYear = new Date().getFullYear();
+const years = Array.from(
+  { length: 15 },
+  (_, index) => currentYear - index
+);
+
     const { isDarkMode } = useTheme();
     const [filterMonth, setFilterMonth] = useState('');
     const [filterYear, setFilterYear] = useState('');
@@ -114,16 +120,20 @@ const SummaryPage = () => {
                         <option value="12">December</option>
                     </select>
 
-                    <select
-                        value={filterYear}
-                        onChange={(e) => setFilterYear(e.target.value)}
-                        className={`border p-2 rounded-md ${isDarkMode ? 'bg-black text-white' : 'bg-white text-black'}`}
-                    >
-                        <option value="">Select Year</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                    </select>
+               <select
+  value={filterYear}
+  onChange={(e) => setFilterYear(e.target.value)}
+  className={`border p-2 rounded-md ${isDarkMode ? 'bg-black text-white' : 'bg-white text-black'}`}
+>
+  <option value="">Select Year</option>
+
+  {years.map((year) => (
+    <option key={year} value={year}>
+      {year}
+    </option>
+  ))}
+</select>
+
                 </div>
 
                 <button
