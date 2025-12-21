@@ -61,11 +61,10 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Helper function to generate JWT token and set cookie
 const generateTokenAndSetCookie = (user, res) => {
     const token = jwt.sign({ username: user.username }, JWT_SECRET);
-    res.cookie('token', token,{ httpOnly: true,        // Secure from JavaScript access
-      secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // ⭐ Important for cross-origin!
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      path: '/'});
+    res.cookie('token', token,{httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge: 7 * 24 * 60 * 60 * 1000});
     console.log('here to make cookie')
     return token;
   };
