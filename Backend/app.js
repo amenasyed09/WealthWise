@@ -647,35 +647,66 @@ app.post('/api/auth/google-login', async (req, res) => {
   const { token } = req.body;
 
   try {
-     
-      const ticket = await client.verifyIdToken({
-          idToken: token,
-          audience: process.env.GOOGLE_CLIENT_ID,
+    // Verify Google token
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload(); 
+    
+    // Check if user already exists in our database
+    let user = await UserModel.findOne({ googleId: payload.sub });
+
+    if (!user) {
+      // If not, create a new user
+      user = new UserModel({
+        googleId: payload.sub,
+        username: payload.name,
+        email: payload.email,
+        profilePic: payload.picture,
       });
 
-      const payload = ticket.getPayload(); 
-      // Check if user already exists in our database
-      let user = await UserModel.findOne({ googleId: payload.sub });
+      await user.save(); 
+    }
 
-      if (!user) {
-          // If not, create a new user without a password
-          user = new UserModel({
-              googleId: payload.sub,
-              username: payload.name,
-              email: payload.email,
-              profilePic: payload.picture,
-             
-          });
+    // ⭐ CREATE JWT TOKEN
+    const jwtToken = jwt.sign(
+      { 
+        username: user.username,
+        email: user.email,
+        id: user._id,
+        googleId: user.googleId
+      },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
 
-          await user.save(); 
+    // ⭐ SET COOKIE
+    res.cookie('googletoken', jwtToken, {
+      httpOnly: true,
+      secure: true,              // HTTPS only
+      sameSite: 'none',          // Cross-origin
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: '/'
+    });
+
+    console.log('✅ Google cookie set for user:', user.email);
+
+    // ⭐ Return success (NO token in body)
+    res.status(200).json({ 
+      message: 'User authenticated successfully',
+      user: {
+        username: user.username,
+        email: user.email,
+        profilePic: user.profilePic
       }
-
-     
-      res.status(200).json({ user, message: 'User authenticated successfully' });
+      // Don't send token in response body!
+    });
 
   } catch (error) {
-      console.error('Error verifying token:', error);
-      res.status(401).json({ message: 'Invalid token' });
+    console.error('Error verifying token:', error);
+    res.status(401).json({ message: 'Invalid token' });
   }
 });
 

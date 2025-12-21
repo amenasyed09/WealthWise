@@ -48,7 +48,7 @@ export default function Auth() {
                 }, { withCredentials: true });
 
                 console.log('Signup successful:', response.data);
-                Cookies.set('token', response.data.token); // Set token cookie
+                // Cookies.set('token', response.data.token); // Set token cookie
                 navigate('/home'); // Automatically navigate to home after signup
 
             } catch (error) {
@@ -65,7 +65,7 @@ export default function Auth() {
                 }, { withCredentials: true });
 
                 console.log('Signin successful:', response.data);
-                Cookies.set('token', response.data.token); // Set token cookie
+                // Cookies.set('token', response.data.token); // Set token cookie
                 navigate('/home'); // Automatically navigate to home after signin
 
             } catch (error) {
@@ -84,7 +84,7 @@ export default function Auth() {
 
     const handleSuccess = async (res) => {
         console.log(res);
-        Cookies.set('googletoken', res.credential);
+        // Cookies.set('googletoken', res.credential);
 
         try {
             const response = await axios.post(`${API_URL}api/auth/google-login`, {
