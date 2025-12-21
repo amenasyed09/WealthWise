@@ -61,16 +61,39 @@ require('dotenv').config();
     
 
   // Helper function to generate JWT token and set cookie
-  const generateTokenAndSetCookie = (user, res) => {
-      const token = jwt.sign({ username: user.username }, JWT_SECRET);
-      res.cookie('token', token,{httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite:'none',
-    maxAge: 7 * 24 * 60 * 60 * 1000});
-      console.log('here to make cookie')
-      return token;
-    };
-    
+const generateTokenAndSetCookie = (user, res) => {
+  const token = jwt.sign(
+    { username: user.username, id: user._id }, 
+    JWT_SECRET,
+    { expiresIn: '7d' } // Add expiration
+  );
+  
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: true,              // ⭐ Always true (you're on HTTPS)
+    sameSite: 'none',          // ⭐ Required for cross-origin
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: '/'                  // ⭐ Add this
+  });
+  
+  console.log('✅ Cookie set successfully');
+  console.log('Token preview:', token.substring(0, 30) + '...');
+  
+  return token;
+};
+// Debug middleware - add AFTER routes
+app.use((req, res, next) => {
+  const originalSend = res.send;
+  
+  res.send = function(data) {
+    console.log('=== Response Headers ===');
+    console.log('Set-Cookie:', res.getHeader('Set-Cookie'));
+    console.log('========================');
+    originalSend.call(this, data);
+  };
+  
+  next();
+});
   app.get('/', (req, res) => {
     console.log('Root route accessed'); // Log when the route is hit
     res.setHeader("Access-Control-Allow-Credentials", "true");
