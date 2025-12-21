@@ -12,63 +12,65 @@ const cookieParser = require('cookie-parser');
 const { OAuth2Client } = require('google-auth-library'); 
 require('dotenv').config();
 
-const app = express();
-const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000', 
-  credentials: true, // ⭐ Allow cookies to be sent
-  optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
-
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use(cookieParser());
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../client/build')));
-  
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
-  });
-}
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-      cb(null, 'uploads/'); 
-  },
-  filename: (req, file, cb) => {
-      cb(null, Date.now() + path.extname(file.originalname)); // File name with timestamp
-  },
-});
-const upload = multer({ storage });
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-
-
-const JWT_SECRET = process.env.JWT_SECRET;
-const GOOGLE_CLIENT_SECRET=process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_CLIENT_ID=process.env.GOOGLE_CLIENT_ID;
-const PORT = process.env.PORT || 5000;
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-mongoose.connect(process.env.MONGODB_URI, {
-  // useNewUrlParser: true,
-  // useUnifiedTopology: true
-})
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) =>  console.error("Error connecting to MongoDB:", err.message));
-
-  
-
-// Helper function to generate JWT token and set cookie
-const generateTokenAndSetCookie = (user, res) => {
-    const token = jwt.sign({ username: user.username }, JWT_SECRET);
-    res.cookie('token', token,{httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  maxAge: 7 * 24 * 60 * 60 * 1000});
-    console.log('here to make cookie')
-    return token;
+  const app = express();
+    app.use(cookieParser());
+  const corsOptions = {
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000', 
+    credentials: true, // ⭐ Allow cookies to be sent
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+    ,  exposedHeaders: ['Set-Cookie'] 
   };
-  
+
+  app.use(cors(corsOptions));
+  app.use(express.json());
+
+  if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../client/build')));
+    
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+    });
+  }
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); 
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname)); // File name with timestamp
+    },
+  });
+  const upload = multer({ storage });
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
+
+  const JWT_SECRET = process.env.JWT_SECRET;
+  const GOOGLE_CLIENT_SECRET=process.env.GOOGLE_CLIENT_SECRET;
+  const GOOGLE_CLIENT_ID=process.env.GOOGLE_CLIENT_ID;
+  const PORT = process.env.PORT || 5000;
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  mongoose.connect(process.env.MONGODB_URI, {
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true
+  })
+    .then(() => console.log("Connected to MongoDB"))
+    .catch((err) =>  console.error("Error connecting to MongoDB:", err.message));
+
+    
+
+  // Helper function to generate JWT token and set cookie
+  const generateTokenAndSetCookie = (user, res) => {
+      const token = jwt.sign({ username: user.username }, JWT_SECRET);
+      res.cookie('token', token,{httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000});
+      console.log('here to make cookie')
+      return token;
+    };
+    
   app.get('/', (req, res) => {
     console.log('Root route accessed'); // Log when the route is hit
     res.setHeader("Access-Control-Allow-Credentials", "true");
