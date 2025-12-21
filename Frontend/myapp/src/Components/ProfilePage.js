@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTheme } from './ThemeContext'; 
-
+import API_URL from './config';
 function ProfilePage() {
     const { isDarkMode } = useTheme();
     const [profileImage, setProfileImage] = useState(null);
@@ -17,7 +17,7 @@ function ProfilePage() {
 
     const fetchUserDetails = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/getuser', {
+            const response = await axios.get(`${API_URL}/api/getuser`, {
                 withCredentials: true,
             });
             setUserDetails(response.data);
@@ -33,7 +33,7 @@ function ProfilePage() {
             const formData = new FormData();
             formData.append('profileImage', file);
             try {
-                const response = await axios.post('http://localhost:5000/api/upload', formData, {
+                const response = await axios.post(`${API_URL}/api/upload`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },

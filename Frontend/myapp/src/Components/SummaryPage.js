@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useTheme } from './ThemeContext';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-
+import API_URL from './config';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const SummaryPage = () => {
@@ -23,7 +23,7 @@ const years = Array.from(
     const fetchData = async () => {
         if (filterMonth && filterYear) {
             try {
-                const response = await axios.get(`http://localhost:5000/api/summary?month=${filterMonth}&year=${filterYear}`, { withCredentials: true });
+                const response = await axios.get(`${API_URL}/api/summary?month=${filterMonth}&year=${filterYear}`, { withCredentials: true });
                 setIncomes(response.data.incomes);
                 setExpenses(response.data.expenses);
                 setError(null);

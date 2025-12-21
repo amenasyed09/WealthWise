@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from './ThemeContext';
 import axios from 'axios';
-
+import API_URL from './config';
 
 const Navbar = () => {
     const { isDarkMode, toggleDarkMode } = useTheme();
@@ -21,7 +21,7 @@ const Navbar = () => {
 
     const confirmLogout = async () => {
         try {
-            await axios.delete('http://localhost:5000/api/logout',{withCredentials:true});
+            await axios.delete(`${API_URL}/api/logout`,{withCredentials:true});
             setShowLogoutModal(false);
             navigate('/');  // Redirect to login page after logout
         } catch (err) {

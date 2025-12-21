@@ -13,7 +13,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-
+import API_URL from './config';
 ChartJS.register(LineElement, BarElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
 
 const Report = () => {
@@ -26,7 +26,7 @@ const Report = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/savings', { withCredentials: true });
+        const response = await axios.get(`${API_URL}/api/savings`, { withCredentials: true });
         setSavingsData(response.data);
 
         const uniqueYears = [

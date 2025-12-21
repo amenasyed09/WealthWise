@@ -3,7 +3,7 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useTheme } from './ThemeContext';
-
+import API_URL from './config';
 const IncomeTracker = () => {
     const currentYear = new Date().getFullYear();
 
@@ -26,7 +26,7 @@ const IncomeTracker = () => {
     useEffect(() => {
         const fetchIncomes = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/income', { withCredentials: true });
+                const response = await axios.get(`${API_URL}/api/income`, { withCredentials: true });
                 setIncomes(response.data);
             } catch (error) {
                 console.error('Error fetching incomes:', error);
@@ -38,7 +38,7 @@ const IncomeTracker = () => {
 
     const handleFilter = async () => {
         try {
-            let query = `http://localhost:5000/api/filter/income?`;
+            let query = `${API_URL}/api/filter/income?`;
             if (filterMonth) {
                 query += `month=${filterMonth}&`;
             }
@@ -64,11 +64,11 @@ const IncomeTracker = () => {
 
         try {
             if (editIncomeId) {
-                const response = await axios.put(`http://localhost:5000/api/income/${editIncomeId}`, newIncome, { withCredentials: true });
+                const response = await axios.put(`${API_URL}/api/income/${editIncomeId}`, newIncome, { withCredentials: true });
                 setIncomes(incomes.map(income => (income._id === editIncomeId ? response.data : income)));
                 setEditIncomeId(null);
             } else {
-                const response = await axios.post('http://localhost:5000/api/income', newIncome, { withCredentials: true });
+                const response = await axios.post(`${API_URL}/api/income`, newIncome, { withCredentials: true });
                 setIncomes([...incomes, response.data]);
             }
 
@@ -93,7 +93,7 @@ const IncomeTracker = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/api/income/${id}`, { withCredentials: true });
+            await axios.delete(`${API_URL}/api/income/${id}`, { withCredentials: true });
             setIncomes(incomes.filter(income => income._id !== id));
         } catch (error) {
             console.error('Error deleting income:', error);

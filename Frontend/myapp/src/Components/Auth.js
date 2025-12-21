@@ -3,7 +3,7 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Import axios
 import Cookies from 'js-cookie';
-
+import API_URL from './config';
 export default function Auth() {
     const [isSignup, setSignup] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +40,7 @@ export default function Auth() {
                     return;
                 }
 
-                const response = await axios.post('http://localhost:5000/api/signup', {
+                const response = await axios.post(`${API_URL}api/signup`, {
                     username,
                     email,
                     password,
@@ -59,7 +59,7 @@ export default function Auth() {
             try {
                 const { email, password } = formData;
 
-                const response = await axios.post('http://localhost:5000/api/signin', {
+                const response = await axios.post(`${API_URL}/api/signin`, {
                     email,
                     password,
                 }, { withCredentials: true });
@@ -87,7 +87,7 @@ export default function Auth() {
         Cookies.set('googletoken', res.credential);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/auth/google-login', {
+            const response = await axios.post(`${API_URL}api/auth/google-login`, {
                 token: res.credential,
             }, { withCredentials: true }); // Include credentials if needed
 

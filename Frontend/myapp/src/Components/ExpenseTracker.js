@@ -3,7 +3,7 @@ import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useTheme } from './ThemeContext';
-
+import API_URL from './config';
 const ExpenseTracker = () => {
     const currentYear = new Date().getFullYear();
 const years = Array.from(
@@ -38,7 +38,7 @@ const years = Array.from(
     useEffect(() => {
         const fetchExpenses = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/expense', { withCredentials: true });
+                const response = await axios.get( `${API_URL}/api/expense`, { withCredentials: true });
                 setExpenses(response.data);
             } catch (error) {
                 console.error('Error fetching expenses:', error);
@@ -50,7 +50,7 @@ const years = Array.from(
 
     const handleFilter = async () => {
         try {
-            let query = `http://localhost:5000/api/filter/expense?`;
+            let query = `${API_URL}api/filter/expense?`;
             if (filterMonth) {
                 query += `month=${filterMonth}&`;
             }
@@ -76,11 +76,11 @@ const years = Array.from(
 
         try {
             if (editExpenseId) {
-                const response = await axios.put(`http://localhost:5000/api/expense/${editExpenseId}`, newExpense, { withCredentials: true });
+                const response = await axios.put(`${API_URL}/api/expense/${editExpenseId}`, newExpense, { withCredentials: true });
                 setExpenses(expenses.map(expense => (expense._id === editExpenseId ? response.data : expense)));
                 setEditExpenseId(null);
             } else {
-                const response = await axios.post('http://localhost:5000/api/expense', newExpense, { withCredentials: true });
+                const response = await axios.post(`${API_URL}/api/expense`, newExpense, { withCredentials: true });
                 setExpenses([...expenses, response.data]);
             }
 
@@ -105,7 +105,7 @@ const years = Array.from(
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/api/expense/${id}`, { withCredentials: true });
+            await axios.delete(`${API_URL}api/expense/${id}`, { withCredentials: true });
             setExpenses(expenses.filter(expense => expense._id !== id));
         } catch (error) {
             console.error('Error deleting expense:', error);
