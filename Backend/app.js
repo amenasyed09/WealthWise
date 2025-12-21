@@ -13,10 +13,15 @@ const { OAuth2Client } = require('google-auth-library');
 require('dotenv').config();
 
 const app = express();
-app.use(cors({
-  origin:  process.env.FRONTEND_URL || '*',
-  credentials: true
-}));
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000', 
+  credentials: true, // ⭐ Allow cookies to be sent
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 if (process.env.NODE_ENV === 'production') {
@@ -56,7 +61,11 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Helper function to generate JWT token and set cookie
 const generateTokenAndSetCookie = (user, res) => {
     const token = jwt.sign({ username: user.username }, JWT_SECRET);
-    res.cookie('token', token,{path:'/'});
+    res.cookie('token', token,{ httpOnly: true,        // Secure from JavaScript access
+      secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // ⭐ Important for cross-origin!
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: '/'});
     console.log('here to make cookie')
     return token;
   };
