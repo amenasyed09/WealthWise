@@ -65,7 +65,7 @@ require('dotenv').config();
       const token = jwt.sign({ username: user.username }, JWT_SECRET);
       res.cookie('token', token,{httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    sameSite:'none',
     maxAge: 7 * 24 * 60 * 60 * 1000});
       console.log('here to make cookie')
       return token;
